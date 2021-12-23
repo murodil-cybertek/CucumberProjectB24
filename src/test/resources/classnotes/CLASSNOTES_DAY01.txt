@@ -1,0 +1,275 @@
+
+12/22/2021
+----------
+
+
+
+6 more classes of UI Test Automation.
+Last -> january 2nd
+Selenium Grid and Jenkins -> 2 days
+SQL and JDBC -> 6-7 classes
+API automation -> 18-19 classes
+Mobile Automation -> 2 days
+===============================
+
+TestNG Selenium Automation Framework:
+	src.test.java
+		com.cybertek
+			pages :
+				BasePage
+				OtherPages for application extends BasePage
+			tests:
+				TestBase:
+				otherTest classes extends TestBase
+			utils:
+				Driver
+				BrowserUtils
+				ConfigurationReader
+
+	configuration.properties
+	pom.xml
+====================================
+
+==> Dataprovider in TestNG -> we will learn along with Data driven testing in few days.
+
+https://testng.org/doc/documentation-main.html#parameters-dataproviders
+
+==> Testng.xml file -> it is file that we use to run all tests as a TestNG suite.
+
+https://testng.org/doc/documentation-main.html#testng-xml
+
+Running all tests using maven command is more common:
+mvn clean test
+
+==> soft assertions.
+Difference between Assert and Verify in automation?
+
+Assert -> when assertion fails, test fails and stops execution at that point. We can use TestNG assertions for that
+Verify -> when verification fails, test keeps running till end, and errors are reported at the end.
+We can use TestNG soft assertions to achive that.
+
+SoftAssert softAssert = new SoftAssert();
+softAssert.assertEquals(5, 4);
+- the above verification fails, but test does not stop.
+
+It stops at the end with following command;
+softAssert.assertAll();
+===================================
+
+Cucumber BDD:
+	BDD -> behavior driven development
+
+TDD vs BDD:
+
+TDD -> Test Driven Development
+
+Purpose is to achieve bug free development.
+
+Write tests first => make sure all tests fail => write application code to pass those tests
+
+This approach is used by software developers. Not automation engineers. Tests are UNIT tests written using either junit or testng. Tests are normally very small and point to smallest functionality.
+======================
+
+- in TDD , tests are written using a programming language. So only technical people understand those. BA, SM, PO mostly cannot understand those and it might create a gap between Technical and non-technical team members.
+
+Therefore BDD was introduced.
+In BDD, approaches are Behaviour focused.
+Behavior Driven Development.
+
+The purpose is to bridge the gap between technical and non-technical people.
+
+Application requirements/stories become Scenarios written using a human language. Gherkin language.
+
+Application story/requirement ==> BDD scenario
+
+BDD scenario is written using ENGLISH language that everyone understands.
+
+ex:
+Given user is logged in to facebook
+When user posts a photo
+Then photo should be visible to all friends
+
+Once the BDD scenario is written by the team.
+Devs (developers) go and write code according to scenario.
+
+SDETs/Automation testers go and write automation code according to scenario
+
+So everyone is on same page.
+
+Three Amigos.
+BA + Dev + QA
+
+Three Amigos sit together and write BDD scenario and post into Jira.
+
+We can divide BDD into 2 layers.
+
+#1 Business layer -> BDD scenario written using Gherkin syntax
+	-> defines how application should work.
+	-> for Business people, BA, PO etc
+#2 Implementation layer -> is done by technical people in your team. Devs, QA Automation, DevOps etc
+================
+
+technologies that we are using for automation so far:
+	Java + Selenium WebDriver + Maven + TestNG + Git
+
+from today:
+	Cucumber + Junit to the list
+
+Cucumber is a tool that is used for automation with BDD approach.
+Cucumber BDD -> we write feature files , inside the feature files we write BDD scenarios in ENGLISH in Gherkin syntax.
+Then we implement those Gherkin steps (Given, Then etc) using java+selenium etc.
+
+Given user is logged in to facebook
+When user posts a photo
+Then photo should be visible to all friends
+
+The above example is written in Gherkin language/syntax, we need to take each step and write automation code for it.Or Write IMPLEMENTATION for those steps.
+=======================================
+If you did not follow the installation instructions and did not set up the cucumber project, then:
+Lets clone it to our machines:
+
+https://github.com/murodil-cybertek/CucumberProjectB24
+
+Open Intellij > FILE > NEW > Project from Version control >
+put the link
+---------------------------------------
+Preferences > Plugins
+Plugins:
+	Cucumber for java
+	Gherkin
+
+Cucumber BDD Automation Framework:
+
+Structure / Layers:
+
+	#1 Feature files and scenarios
+		- we add file that has extension .feature
+		- type scenario in Gherkin and English languages
+		- feature files goto src/test/resources/features package
+
+		EX:
+		Scenario: User search title verification
+	    Given User is on Google home page
+	    When User searches for apple
+	    Then User should see apple in the title
+
+    #2 Step defition classes with implementation methods:
+    	- step def classes goto step_definions package
+    	- we add a java class with methods
+    	- each method will have a matching Gherkin scenario step:
+
+    	public class Google_StepDefinitions {
+
+		    @Given("User is on Google home page")
+		    public void user_is_on_google_home_page() {
+		        Driver.getDriver().get("https://www.google.com");
+
+		    }
+
+    #3. Page objects and utilites.
+    	Inside step definition methods, we write selenium automation code using our Utilities and page object model classes. add assertions.
+
+    	POM classes goto pages package
+    	Utility classes goto utilites package.
+
+    #4 CukesRunners:
+    	They goto runners package, and in runners class, we define path to step definitions, and feature files, tags, report plugs etc:
+
+    @RunWith(Cucumber.class)
+	@CucumberOptions(
+	        features = "src/test/resources/features",
+	        glue = "com/cybertek/step_definitions",
+	        dryRun = false
+	)
+	public class CukesRunner {
+	}
+========================================
+
+ @RunWith(Cucumber.class) -> this annotation comes from junit.
+ It basically saying to run the class as Cucumber BDD tests.
+
+ features => we define address of/path to feature files in our project
+ glue => location/path that points to step definitions
+ dryRun = false => run the cucumber feature files
+ dryRun = true => do not run, just check if all feature file scenario steps have a matching step defition
+===============================================
+
+Cucumber is not automation tool
+Cucumber is a tool that is used to implemement BDD
+Cucumber is used with Junit or TestNG to run and do assertions
+Cucumber BDD Gherkin keywords: Feature, Scenario, Given, When, And, Then, Not..
+
+practice time:
+
+#1) lets write a cucumber bdd scenario in Gherkin format:
+
+	Feature:
+		As a user, I should be able to search for jobs using a keyword and zipcode, then see results.
+
+	Scenario: User searches for a job
+		Given User is on dice homepage
+		When User enters keyword and zipcode
+		Then User should see search results
+
+Given -> is used for some precondition
+	Given User is on dice homepage
+	Given User is logged in as admin
+	Given User is frequent flier
+
+When -> is used for some steps/actions of the scenario
+	When User enters keyword and zipcode
+	When User enters email
+	When User clicks on search
+
+Then -> is used for some verification of expected result, Acceptance Criteria.
+	Then User should see search results
+	Then User should be logged in
+	Then Meeting should be scheduled
+-----------------------------------
+
+dice_jobsearch.feature
+
+Feature:
+		As a user, I should be able to search for jobs using a keyword and zipcode, then see results.
+
+Scenario: User searches for a job
+	Given User is on dice homepage
+	When User enters keyword and zipcode
+	Then User should see search results
+
+#2 Next need to add step definition class and add each step.
+
+Lets do DRY RUN!
+
+Goto runner:
+	dryRun=true
+
+It will -> check if each scenario step has a matching step definition.
+	-> generate suggestions that we can copy and use in our step defition class
+
+Now lets add below class in Step_defitions package:
+	public class DiceJobSearchStepDefs
+========================
+
+we set dryRun=true :
+	- when we just added new feature file and need to generate steps.
+	- it does not RUN the steps
+	- it just checks and provides list of steps that needs implementation
+
+we set dryRun=false :
+	- when we are RUNNING our tests
+
+Huseyin Lucas Aydin — Today at 9:53 PM
+so we are basically getting the benefit of dryRun by turning that to "true"so that it gives us what we need to type for the code?
+
+YES!
+========================
+
+
+dice.url=https://www.dice.com
+
+
+
+
+
+
