@@ -19,7 +19,7 @@ public class EtsyHomePage {
 
     public void searchFor(String item) {
         searchField.clear();
-        searchButton.sendKeys(item);
+        searchField.sendKeys(item);
         searchButton.click();
     }
 

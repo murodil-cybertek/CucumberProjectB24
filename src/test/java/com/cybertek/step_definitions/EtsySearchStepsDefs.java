@@ -1,5 +1,6 @@
 package com.cybertek.step_definitions;
 
+import com.cybertek.pages.EtsyHomePage;
 import com.cybertek.utilities.ConfigurationReader;
 import com.cybertek.utilities.Driver;
 import io.cucumber.java.en.Given;
@@ -25,8 +26,8 @@ public class EtsySearchStepsDefs {
 
     @When("User searches for wooden spoon")
     public void user_searches_for_wooden_spoon() {
-        //EtsyHomePage etsyPage = new EtsyHomePage
-        //etsyPage.searchFor("wooden spoon");
+        EtsyHomePage etsyPage = new EtsyHomePage();
+        etsyPage.searchFor("wooden spoon");
     }
 
     @Then("Page title should start with wooden spoon")
