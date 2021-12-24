@@ -1,5 +1,6 @@
 package com.cybertek.step_definitions;
 
+import com.cybertek.pages.EtsyAllCategoriesPage;
 import com.cybertek.pages.EtsyHomePage;
 import com.cybertek.utilities.BrowserUtils;
 import com.cybertek.utilities.ConfigurationReader;
@@ -46,5 +47,8 @@ public class EtsySearchStepsDefs {
     @Then("All categories should be displayed")
     public void allCategoriesShouldBeDisplayed() {
         Assert.assertEquals("All categories | Etsy", driver.getTitle());
+
+        EtsyAllCategoriesPage allCategoriesPage = new EtsyAllCategoriesPage();
+        Assert.assertTrue(allCategoriesPage.allCategoriesHeader.isDisplayed());
     }
 }
