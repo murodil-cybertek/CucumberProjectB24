@@ -10,6 +10,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class EtsySearchStepsDefs {
 
@@ -46,6 +48,10 @@ public class EtsySearchStepsDefs {
 
     @Then("All categories should be displayed")
     public void allCategoriesShouldBeDisplayed() {
+        //wait for title to change to "All categories | Etsy"
+        WebDriverWait wait = new WebDriverWait(driver, 20);
+        wait.until(ExpectedConditions.titleIs("All categories | Etsy"));
+
         Assert.assertEquals("All categories | Etsy", driver.getTitle());
 
         EtsyAllCategoriesPage allCategoriesPage = new EtsyAllCategoriesPage();
