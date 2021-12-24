@@ -39,11 +39,12 @@ public class EtsySearchStepsDefs {
 
     @When("User searches for empty value")
     public void userSearchesForEmptyValue() {
-
+        EtsyHomePage etsyPage = new EtsyHomePage();
+        etsyPage.searchFor("");
     }
 
     @Then("All categories should be displayed")
     public void allCategoriesShouldBeDisplayed() {
-
+        Assert.assertEquals("All categories | Etsy", driver.getTitle());
     }
 }

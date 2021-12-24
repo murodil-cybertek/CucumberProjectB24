@@ -17,6 +17,11 @@ public class EtsyHomePage {
     @FindBy(xpath = "//button[@value='Search']")
     public WebElement searchButton;
 
+    /**
+     * accepts a String and searches for it on etsy
+     * @param item
+     * searchFor("iphone case");
+     */
     public void searchFor(String item) {
         searchField.clear();
         searchField.sendKeys(item);
