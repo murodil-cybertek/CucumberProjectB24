@@ -32,6 +32,6 @@ public class EtsySearchStepsDefs {
 
     @Then("Page title should start with wooden spoon")
     public void page_title_should_start_with_wooden_spoon() {
-
+        Assert.assertTrue( "title did not match" , driver.getTitle().startsWith("Wooden spoon") );
     }
 }
