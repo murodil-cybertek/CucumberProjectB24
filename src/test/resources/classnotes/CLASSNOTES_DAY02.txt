@@ -1,0 +1,158 @@
+
+12/23/2021
+----------
+
+Cucumber BDD Automation Day 2
+-----------------------------
+
+Cucumber BDD (Behaviour Driven Development) framework.
+
+=> Write Cucumber BDD Scenarios in Gherkin Syntax.
+	- Gherkin -> Scenario, Given, When, Then etc
+	- Cooperate with BA, QA, DEV , PO
+	- Write automation code in plain english
+	- Re-use implemented steps
+=> Step definitions for each step in the scenario
+	- this is where we write our java selenium code
+	- each step will have a java method pointing to it, and in the method, we use java , selenium, POM, Utilities, asserts etc.
+
+dry run
+tags
+page object model
+adding plugins for html report
+and some junit assertions
+
+
+User Story => Feature
+
+When we have some feature or a story , we can test it in different ways: positive tests, negative tests, boundary analysis etc
+
+For each positive or negative cases, we can write
+Cucumber Scenarios.
+
+
+add new feature file:
+	etsySearch.feature
+
+Feature: User etsy search
+	As a user, when i search for item, I should see the results.
+
+Scenario: User search for wooden spoon
+	Given User is on etsy homepage
+	Then Page title should be as expected
+	When User searches for wooden spoon
+	Then Page title should start with wooden spoon
+
+TestNG vs JUnit assertions.
+
+TestNG:
+Assert.assertEquals(actual, expected);
+
+JUnit:
+Assert.assertEquals(expected, actual);
+
+int n1 = 5;
+int n2 = 4;
+
+TestNG:
+Assert.assertEquals(n1+n2, 9);
+
+JUnit:
+Assert.assertEquals(9, n1+n2);
+
+If you want to add a message that shows when assertions fails:
+again the order is different:
+
+TestNG:
+Assert.assertEquals(actual, expected, "message");
+
+JUnit:
+Assert.assertEquals("message", expected, actual);
+=================================
+
+TestNG:
+import org.testng.Assert.assertEquals;
+
+JUnit:
+import org.junit.Assert.assertEquals;
+=================================
+
+Cucumber BDD Feature file and Scenario =>> Create step def class and methods with annotations =>> Writing java selenium code into step def methods - add POM
+				 - do assertions
+				 - add values to config file
+
+==================================
+
+How to use TAGS with cucumber?
+
+we can add tags that start with @tagname to scenario or whole feature file.
+
+@etsy
+Feature: User etsy search
+  As a user, when i search for item, I should see the results.
+
+  @smoke
+  Scenario: User search for wooden spoon
+    Given User is on etsy homepage
+    Then Page title should be as expected
+    When User searches for wooden spoon
+    Then Page title should start with wooden spoon
+
+After we add tags, we can specify those tags in our cukesrunner class. => tags = "@etsy"
+
+Tags help us run certain scenario or feature by itself.
+Or we can group them by using a tag.
+
+tags = "@smoke" => run only smoke test scenarios
+tags = "@regression" => run all tests that are part of regression suite
+
+we can add multiple annotation for the same scenario/feature
+
+@etsy @regression
+Feature: User etsy search
+  As a user, when i search for item, I should see the results.
+
+  @smoke @search
+  Scenario: User search for wooden spoon
+    Given User is on etsy homepage
+    Then Page title should be as expected
+    When User searches for wooden spoon
+    Then Page title should start with wooden spoon
+==========================
+How to multiple tags.
+
+or ==> ||
+and ==> &&
+not ==> !
+
+tags = "@google or @library" => it will run all scenarios with @google and @library annotations
+
+
+tags = "@google and @smoke" => it will run scenarios that have BOTH @google AND @smoke annotations
+
+tags = "@regression and not @etsy"
+
+===================
+
+PLUGINS in CukesRunner class:
+
+We can add plugins to CukesRunner class to generate reports.
+
+generate html report of execution
+
+@RunWith(Cucumber.class)
+@CucumberOptions(
+	plugin = {
+		"html:target/cucumber-report.html"
+	}
+	features = ... ,
+	glue = ... ,
+	tags = ...
+)
+public class CukesRunner {
+
+}
+
+
+
+
