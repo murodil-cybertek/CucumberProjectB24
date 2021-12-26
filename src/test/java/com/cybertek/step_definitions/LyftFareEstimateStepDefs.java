@@ -11,6 +11,8 @@ import static org.junit.Assert.*;
 
 public class LyftFareEstimateStepDefs {
 
+    LyftFareEstimatePage fareEstimatePage = new LyftFareEstimatePage();
+
     @Given("User is on lyft fare estimate page")
     public void user_is_on_lyft_fare_estimate_page() {
         Driver.getDriver().get(ConfigurationReader.getProperty("lyft.fare.estimate.url"));
@@ -22,7 +24,7 @@ public class LyftFareEstimateStepDefs {
     @When("User enters {string} to pickup address")
     public void user_enters_to_pickup_address(String pickUpLocation) {
         //need to add a page object class for the Lyft estimate page
-        LyftFareEstimatePage fareEstimatePage = new LyftFareEstimatePage();
+        //LyftFareEstimatePage fareEstimatePage = new LyftFareEstimatePage();
 
         //fareEstimatePage.pickUp.sendKeys(pickUpLocation);
 
@@ -32,12 +34,12 @@ public class LyftFareEstimateStepDefs {
 
     @And("User enters {string} to drop-off address")
     public void user_enters_to_drop_address(String dropOffLocation) {
-
+        fareEstimatePage.dropOff.sendKeys(dropOffLocation);
     }
 
     @And("User clicks on get estimate button")
     public void user_clicks_on_get_estimate_button() {
-
+        fareEstimatePage.getEstimateBtn.click();
     }
 
     @Then("User should see estimated prices")
