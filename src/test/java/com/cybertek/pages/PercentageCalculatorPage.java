@@ -18,7 +18,7 @@ public class PercentageCalculatorPage {
     @FindBy(xpath = "//input[@size='7']")
     public WebElement input;
 
-    @FindBy(xpath = "/(//input[@size='6'])[1]")
+    @FindBy(xpath = "(//input[@size='6'])[1]")
     public WebElement result;
 
 }
