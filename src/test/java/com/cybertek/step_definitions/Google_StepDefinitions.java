@@ -8,6 +8,8 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
 
+import java.util.List;
+
 public class Google_StepDefinitions {
 
     @Given("User is on Google home page")
@@ -34,5 +36,11 @@ public class Google_StepDefinitions {
 
         Assert.assertTrue(actualTitle.contains(expectedInTitle));
 
+    }
+    
+    @Then("User should be able to search for following:")
+    public void userShouldBeAbleToSearchForFollowing(List<String> items) {
+        System.out.println("items = " + items);
+        //loop and search for each item on google
     }
 }
