@@ -42,5 +42,12 @@ public class Google_StepDefinitions {
     public void userShouldBeAbleToSearchForFollowing(List<String> items) {
         System.out.println("items = " + items);
         //loop and search for each item on google
+        GoogleSearchPage searchPage = new GoogleSearchPage();
+
+        for(String eachItem : items) {
+
+        }
+
+
     }
 }
