@@ -1,5 +1,6 @@
 package com.cybertek.step_definitions;
 
+import com.cybertek.pages.LyftFareEstimatePage;
 import com.cybertek.utilities.ConfigurationReader;
 import com.cybertek.utilities.Driver;
 import io.cucumber.java.en.And;
@@ -20,6 +21,12 @@ public class LyftFareEstimateStepDefs {
 
     @When("User enters {string} to pickup address")
     public void user_enters_to_pickup_address(String pickUpLocation) {
+        //need to add a page object class for the Lyft estimate page
+        LyftFareEstimatePage fareEstimatePage = new LyftFareEstimatePage();
+
+        //fareEstimatePage.pickUp.sendKeys(pickUpLocation);
+
+        fareEstimatePage.enterPickUpLocation(pickUpLocation);
 
     }
 
