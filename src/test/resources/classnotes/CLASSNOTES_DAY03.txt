@@ -1,0 +1,211 @@
+
+12/26/2021
+----------
+
+Cucumber BDD Automation Day 03
+------------------------------
+
+- write feature files with Scenarios in Gherkin language
+- write step definitions for each step in scenario
+- add Page object classes with elements and methods
+- use a CukesRunner to run the scenarios
+- do assertion using JUnit
+- use tags to filter the scenarios then execute them
+- plugin for html reporting in cukesRunner class
+
+- passing parameters using scenario steps
+- Background
+- @Before, @After, @BeforeStep , @AfterStep
+- Parameterization ...
+=================================================
+
+lyft.fare.estimate.url=https://www.lyft.com/rider/fare-estimate
+
+Feature file:
+	lyft_fare_estimate.feature
+
+Feature: Searching Lyft fare details
+
+	As a rider , I should be able to enter pickup and drop off locations so that I can see the estimated fare
+
+
+Scenario: Fare estimate using City
+	Given User is on lyft fare estimate page
+	When User enters "Mclean, VA" to pickup address
+	And User enters "Woodbridge, VA" to drop address
+	And User clicks on get estimate button
+	Then User should see estimated prices
+
+========
+
+- PASSING PARAMETERS FROM FEATURE FILE:
+
+Lets look at this step below, it has city name within double quotes:
+
+When User enters "Mclean, VA" to pickup address
+
+When we generate a step for above step, Cucumber will look at "Mclean, VA" as a String parameter. So to match it , we need to write our step definition like below:
+
+@When("User enters {string} to pickup address")
+public void user_enters_to_pickup_address(String pickUpLocation) {
+
+}
+
+{string} -> means, String parameter. and we can pass different values, not only "Mclean, VA"
+
+EX: When User enters "Brooklyn, NY" to pickup address
+When User enters "7925 jones branch dr" to pickup address
+
+public void user_enters_to_pickup_address(String pickUpLocation)==> when we have a parameter coming from cucumber scenario step, our java method in Step def class, needs to have a String parameter. Like String pickUpLocation.
+
+When User enters "Mclean, VA" to pickup address
+
+@When("User enters {string} to pickup address")
+public void user_enters_to_pickup_address(String pickUpLocation) {
+	//value of pickUpLocation => Mclean, VA
+}
+
+----
+When User enters "Boston, MA" to pickup address
+
+@When("User enters {string} to pickup address")
+public void user_enters_to_pickup_address(String pickUpLocation) {
+	//value of pickUpLocation => Boston, MA
+}
+----
+
+When User enters 155 to amount field
+
+@When("When User enters {int} to amount field")
+public void userEntersAmount(int amount) {
+	amount ==> 155
+}
+----
+Multiple String parameters from scenario:
+
+When User enters "Boston, MA" to pickup address "New York, NY" to drop-off address
+
+@When("User enters {string} to pickup address {string} to drop-off address")
+public void user_enters_to_pickup_address(String pickUpLocation, String dropOffLocation) {
+	//value of pickUpLocation => Boston, MA
+}
+============================
+
+Smoke tests => dev env
+			=> QA env
+			=> staging
+			=> Prod
+
+Regression(at end of each sprint) => dev env
+		   => QA env
+		   => staging
+		   => prod (before release)
+
+if you are running automation in prod, you need dedicated credentials and test data.
+=============================
+
+So far:
+	- feature files
+	- step definition classes
+	- dryRun
+	- CukesRunner
+	- tags @likeThis
+	- plugin
+	- passing step parameters
+		-> passing single param
+		-> passing multiple params
+
+When passing parameters, we can pass single value or list of values to the step.
+
+EX: single => When user searches for "java"
+	multiple=> When user searches for the following:
+					|java|
+					|selenium|
+					|cucumber bdd|
+					|QA automation|
+
+IMPLEMENTATION:
+	@When("user searches for {string}")
+	public void userSearchesFor(String value) {
+		....
+	}
+
+	@When("user searches for {string}")
+	public void userSearchesFor(List<String> values) {
+		....
+	}
+
+When passing multiple values, our method parameter will be a list.
+
+Lets try now with following scenario:
+
+google_multiple_search.feature
+
+@google
+Feature: Passing multiple parameters to the step
+
+Scenario:
+	Given User is on Google home page
+	Then User should be able to search for following:
+					|java|
+					|selenium|
+					|cucumber bdd|
+					|QA automation|
+					|wooden spoon|
+============================================
+
+percentage_calculator.feature
+
+percentage.url=https://percentagecalculator.net
+
+Feature: Calculate 5% multiple values
+
+Scenario: User calculating 5% values
+	Given User is on percentage calculator page
+	Then User should see following calculations:
+		|100|5|
+		|500|25|
+		|1300|65|
+		|2100|105|
+
+As you can see above, we are passing multiple values to our step that are in PAIR format. So we can look at it as Key+Value format in the Map data structure.
+
+So while implementing the above step, we can add a Map parameter to our method:
+
+@Then("User should see following calculations:")
+public void user_should_see_following_calculations(Map<Integer, Integer> valuesMap) {
+    System.out.println("valuesMap = " + valuesMap);
+}
+
+Map<Integer, Integer> valuesMap => with follwing values:
+First comes the key then the value for that key:
+we can have multiple K+V pairs in a map:
+|100|5|
+|500|25|
+|1300|65|
+|2100|105|
+
+In the background cucumber framework will create hashmap and add values similar to below:
+
+Map<Integer, Integer> valuesMap = new HashMap<>();
+valuesMap.put(100,5);
+valuesMap.put(500,25);
+valuesMap.put(1300,65);
+valuesMap.put(2100,105);
+
+How to read values from a map:
+
+valueMap.get(100) => 5
+valueMap.get(500) => 25
+...
+valueMap.get(2100) => 105
+.........................
+
+How to loop through each key in the map:
+
+for(Integer inputKey : valueMap.keySet()) {
+	enter inputKey into target number
+	click calculate
+	read 5% result and compare with inputKey's value in the map:
+		valueMap.get(inputKey) => value of the key
+}
