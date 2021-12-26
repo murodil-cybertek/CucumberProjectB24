@@ -45,9 +45,8 @@ public class Google_StepDefinitions {
         GoogleSearchPage searchPage = new GoogleSearchPage();
 
         for(String eachItem : items) {
-
+            searchPage.searchBar.clear();
+            searchPage.searchBar.sendKeys(eachItem + Keys.ENTER);
         }
-
-
     }
 }
