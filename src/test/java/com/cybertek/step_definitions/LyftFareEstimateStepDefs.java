@@ -1,15 +1,21 @@
 package com.cybertek.step_definitions;
 
+import com.cybertek.utilities.ConfigurationReader;
+import com.cybertek.utilities.Driver;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import static org.junit.Assert.*;
 
 public class LyftFareEstimateStepDefs {
 
     @Given("User is on lyft fare estimate page")
     public void user_is_on_lyft_fare_estimate_page() {
-
+        Driver.getDriver().get(ConfigurationReader.getProperty("lyft.fare.estimate.url"));
+        String expectedTitle = "Get Fare Estimates for Your City - Lyft Price Estimate | Lyft";
+        String actualTitle = Driver.getDriver().getTitle();
+        assertEquals("Lyft fare estimate page is not displayed", expectedTitle, actualTitle);
     }
 
     @When("User enters {string} to pickup address")
