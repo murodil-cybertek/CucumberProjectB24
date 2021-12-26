@@ -20,6 +20,12 @@ public class LyftFareEstimatePage {
     @FindBy(xpath = "//button[.='Get estimate']")
     public WebElement getEstimateBtn;
 
+    @FindBy(xpath = "//h3[.='RIDE TYPES']")
+    public WebElement rideTypesHeader;
+
+    @FindBy(xpath = "//table/tbody/tr[1]/td[3]")
+    public WebElement liftPrice;
+
     public void enterPickUpLocation(String location) {
         pickUp.sendKeys(location);
     }

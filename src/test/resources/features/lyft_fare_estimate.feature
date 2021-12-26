@@ -5,7 +5,7 @@ Feature: Searching Lyft fare details
 
   Scenario: Fare estimate using City
     Given User is on lyft fare estimate page
-    When User enters "Mclean, VA" to pickup address
-    And User enters "Woodbridge, VA" to drop-off address
+    When User enters "Mclean, VA, USA" to pickup address
+    And User enters "Woodbridge, VA, USA" to drop-off address
     And User clicks on get estimate button
     Then User should see estimated prices
