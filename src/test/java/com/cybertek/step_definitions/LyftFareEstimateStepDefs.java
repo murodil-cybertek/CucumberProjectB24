@@ -56,4 +56,8 @@ public class LyftFareEstimateStepDefs {
         System.out.println("Lyft Estimated price and time = " + fareEstimatePage.liftPrice.getText());
     }
 
+    @Then("User should see error message")
+    public void userShouldSeeErrorMessage() {
+        assertTrue("Error message is not displayed", fareEstimatePage.errorMsg.isDisplayed());
+    }
 }

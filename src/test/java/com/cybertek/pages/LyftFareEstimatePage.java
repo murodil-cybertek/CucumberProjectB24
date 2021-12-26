@@ -26,6 +26,9 @@ public class LyftFareEstimatePage {
     @FindBy(xpath = "//table/tbody/tr[1]/td[3]")
     public WebElement liftPrice;
 
+    @FindBy(xpath = "//small[.='Please select a valid location.']")
+    public WebElement errorMsg;
+
     public void enterPickUpLocation(String location) {
         pickUp.sendKeys(location);
     }
