@@ -30,7 +30,7 @@ public class PercentageCalculatorStepDefs {
             BrowserUtils.sleep(1);
 
             System.out.println("INPUT VALUE = " + inputKey);
-            System.out.println("EXPECTED 5% VALUE = " + valuesMap.get(inputKey));
+            System.out.println("EXPECTED 5% VALUE = " + valuesMap.get(inputKey)); //value of key in map
             System.out.println("ACTUAL 5% CALCULATED VALUE = " + calculatorPage.result.getAttribute("value"));
             System.out.println("======================");
             //assert that expected %5 value matches the actual calculated value. Then go home
