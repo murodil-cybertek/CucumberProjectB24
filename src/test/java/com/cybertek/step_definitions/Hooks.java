@@ -11,7 +11,7 @@ import io.cucumber.java.Before;
  */
 public class Hooks {
 
-    @Before
+    @Before()
     public void setUpScenario() {
         System.out.println("BEFORE - setUp method is running before the scenario ");
     }
