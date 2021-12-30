@@ -11,6 +11,9 @@ public class CalculatorPage {
         PageFactory.initElements(Driver.getDriver(), this);
     }
 
+    @FindBy(id = "sciOutPut")
+    public WebElement resultElem;
+
     /**
      * clickOn("5"); it should click 5 on calc
      * clickOn("7"); it should click 7 on calc
