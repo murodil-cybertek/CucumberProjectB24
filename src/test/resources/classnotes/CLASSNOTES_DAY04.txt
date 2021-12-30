@@ -1,0 +1,227 @@
+
+12/29/2021
+----------
+
+Cucumber BDD automation day 4
+-----------------------------
+
+Automation Framework:
+	- organize the code to make it re-usable and maintainable and readable
+	- to structure the project into main sections/packages so that we can manage easily
+
+Do you know how to set up automation framework from scratch:
+
+yes off courrrseeee.
+
+When I set up my BDD automation framework , i use:
+	java, selenium webdriver, cucumber, junit, maven...
+	I use java as my programming language.
+	I use selenium webdriver as my automation tool
+	I use Cucumber for BDD approach that helps with code reusabilty also bridging the gap between technical and non-technical team members
+	I use Junit for assertions
+	And maven as build tool and for dependency management.
+	I use git and github for version control
+	I follow clean code principles and java programming conventions.
+	I make sure to write reusable utility methods and make code readable and maintainable.
+
+	If we talk about how I structure my framework:
+
+		CucumberBDD Project:
+			packages:
+				pages:
+					page objects: LoginPage, SearchPage etc
+				runners:
+					CukesRunner
+				step_defitions:
+					LoginStepDefs, AddAccountStepDefs, ProfileStepDefs
+				utilities:
+					- general utilities:
+							Driver, ConfigurationReader, WebTableUtil, BrowserUtil
+					- app specific utilities:
+							WebOrdersUtil, EtsyUtil etc
+
+			resources:
+				features:
+					weborders_add.feature
+					weborders_remove.
+			configuration.properties :
+				store test data, urls, some credentials
+			pom.xml : dependencies
+=========================================================
+
+mvnrepository.com is public libraries repository. it does not guarantee security of the jar files or any dependencies.
+
+WHen you join the company they will have internal dependency repository:
+You cannot just add directly from mvnrepository.com
+
+mvnrepository.com ----> AutomationProject in your personal computer
+
+mvnrepository.com ----> Nexus company repository ---> AutomationProject in your company computer
+
+Nexus repo url: google.nexus.com
+Goto url and search for artifact/dependency you need.
+
+=========================
+
+U join the company and there is no Cucumber dependency in the company Nexus:
+
+You place the request and wait for approval. If it is goverment project, good luck and have patience waiting.
+
+=========================
+
+Background: keyword in Cucumber BDD.
+
+Background is a Gherkin keyword similar to Scenario, When, Then etc
+
+If we put any step(s) under Background keyword, those steps will run before every scenario in the feature file.
+
+Feature: Example
+
+Background:
+	User is on google home page
+
+Scenario: one
+	Given User searches for a book
+	Then book results should be displayed
+
+Scenario: two
+	Given User searches for a image
+	Then related images should be displayed
+
+Scenario: three
+	Given User searches for a movie
+	Then movie details should be displayed
+
+When we execute the above scenarios:
+
+Flow will be:
+	Background ==> Scenario One
+	Background ==> Scenario Two
+	Background ==> Scenario Three
+
+Steps in Background will run before each scenario steps.
+It is similar to @BeforeMethod in TestNG.
+===========================================
+
+Cucumber BDD + JUnit
+	JUnit - assertions, and runner
+
+Cucumber BDD + TestNG
+	TestNG - assertions, and runner
+
+We can use Cucumber BDD with JUnit or TestNG. We do not mix them.
+
+Cucumber BDD with JUnit is more popular combination. and more straightforward
+
+If there is no Cucumber then TestNG framework like we learned is more popular.
+
+add new feature file:
+	calculator.feature
+
+calculator.url=https://www.calculator.net
+
+Feature: Calculator Tests
+
+Background:
+	Given User is on calculator page
+
+Scenario: Adding
+	Given User clicks on "5" on calculator
+	And User clicks on "+" on calculator
+	And User clicks on "3" on calculator
+	Then result "8" should be displayed
+
+Scenario: Subtracting
+	Given User clicks on "9" on calculator
+	And User clicks on "-" on calculator
+	And User clicks on "5" on calculator
+	Then result "4" should be displayed
+
+Scenario: Multiplying
+	Given User clicks on "8" on calculator
+	And User clicks on "*" on calculator
+	And User clicks on "7" on calculator
+	Then result "56" should be displayed
+
+Scenario: Dividing
+	Given User clicks on "10" on calculator
+	And User clicks on "/" on calculator
+	And User clicks on "2" on calculator
+	Then result "5" should be displayed
+=================
+
+Normally in background, we put common steps that need to run before each scenario. could be: going to home page , logging in, etc
+
+Some pre-condition steps can also goto background:
+	creating new product etc
+
+=================
+
+Passing parameters through Feature file:
+single parameters , multiple as a List or Map etc.
+
+PARAMETRIZATION OF INPUTS IN FEATURE FILE.
+
+PARAMETRIZATION -> ability to pass one or more parameters to our test from feature file.
+
+When single parameter:
+	"hi" ==> {string}
+	44 ==> {int}
+
+When multiple params, by default Cucumber looks at it as DataTable.
+DataTable is generic structure used by cucumber, and we changed it to List or Map etc
+-----
+
+Background: contains steps that run before each scenario.
+
+Where do we globally close or open the browser in Cucumber BDD framework.
+In TestNG framework, opening and closing the browser was done in TestBase class with @BeforeMethod annotation.
+
+in Cucumber BDD framework, we add a class called Hooks.java into Step definitions. This name is common in Cucumber BDD frameworks and used similar to TestBase.
+
+Cucumber as well has some annotations.
+
+@Before -> steps run before each scenario
+@After -> steps runs after each scenario
+
+Lets goto Step_definitions package and add a class called Hooks.java
+
+@Before("@calculator") -> runs set up method for only @calculator tagged scenarios
+
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+
+public class Hooks {
+
+    @Before()
+    public void setUpScenario() {
+        System.out.println("BEFORE - setUp method is running before the scenario ");
+    }
+
+    @After
+    public void tearDownScenario() {
+        System.out.println("AFTER - tearDown method is running after the scenario");
+        Driver.closeDriver();
+    }
+
+}
+
+These annotations come from cucumber io package and it is part of cucumber bdd library. Not Junit or TestNG.
+
+Normally we name the class Hooks.java and add setUp and tearDown methods with @Before and @After annotations.
+We place this class in step_defitions package. and It will run Automatically before and after each Cucumber Scenario.
+
+No need to extend anything or use inheritance nor import.
+
+When scenario is running, Cucumber runner will scan and look for @Before and @After annotated methods in step defs package.if it finds, it will run.
+=====================
+
+@Before -> steps run before each scenario
+@After -> steps runs after each scenario
+
+@BeforeStep -> steps run before each scenario step
+@AfterStep -> steps runs after each scenario step
+
+We might need it maybe to take screenshot of each step as evidence.
+
+Cucumber with Ruby has more annotations than Cucumber with Java
