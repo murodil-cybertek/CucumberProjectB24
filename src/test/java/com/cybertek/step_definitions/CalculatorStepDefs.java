@@ -1,5 +1,7 @@
 package com.cybertek.step_definitions;
 
+import com.cybertek.utilities.ConfigurationReader;
+import com.cybertek.utilities.Driver;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 
@@ -7,7 +9,7 @@ public class CalculatorStepDefs {
 
     @Given("User is on calculator page")
     public void user_is_on_calculator_page() {
-
+        Driver.getDriver().get(ConfigurationReader.getProperty("calculator.url"));
     }
 
     @Given("User clicks on {string} on calculator")
