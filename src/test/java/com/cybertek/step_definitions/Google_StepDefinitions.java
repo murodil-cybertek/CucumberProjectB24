@@ -12,6 +12,8 @@ import java.util.List;
 
 public class Google_StepDefinitions {
 
+    GoogleSearchPage searchPage = new GoogleSearchPage();
+
     @Given("User is on Google home page")
     public void user_is_on_google_home_page() {
 
@@ -49,4 +51,17 @@ public class Google_StepDefinitions {
             searchPage.searchBar.sendKeys(eachItem + Keys.ENTER);
         }
     }
+
+    @When("User searches for {string} capital")
+    public void userSearchesForCapital(String countryName) {
+        System.out.println("Searching for capital city of " + countryName);
+        searchPage.searchBar.sendKeys("what is capital city of " + countryName + Keys.ENTER);
+    }
+
+    @Then("User should see {string} in the result")
+    public void userShouldSeeInTheResult(String capitalCity) {
+        System.out.println("Expected Capital City name: " + capitalCity);
+    }
+
+
 }
