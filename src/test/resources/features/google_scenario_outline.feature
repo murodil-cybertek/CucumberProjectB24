@@ -7,7 +7,7 @@ Feature: Data driven testing using Scenario outline with Examples table
     Then User should see "<capital>" in the result
     Examples:
       | country| capital|
-      | USA    | Washington DC |
+      | USA    | Washington, D.C. |
       | Turkey | Ankara |
       | Ukraine| Kyiv |
       | Turkmenistan| Ashgabat |

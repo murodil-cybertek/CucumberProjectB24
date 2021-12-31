@@ -1,0 +1,189 @@
+
+12/30/2021
+----------
+
+Cucumber BDD Automation Day 05
+------------------------------
+
+background
+Hooks class
+
+Background: is Gherkin Keyword and used in the feature file.
+		- steps in the Background will run before each scenario in that same feature file
+		- it is applicable to only the feature file it is located in
+		- we can put pre-conditions or common starting steps for the scenarios in that feature file: login, open browser etc
+
+Hook class: - contains @Before, @After, @BeforeStep, @AfterStep annotations and it is global for all the scenarios in all the feature files.
+		- steps in set up or teardown run before and after each scenario
+		- normally we use it for setting up browser, closing the browser, taking screenshots etc
+		- annotations come from io.cucumber and no need for any inheritance
+
+Similarities are both of them can be configured to run before the scenario. But remember: Background: is only for that same feature file and does not affect any other ones.
+	Hooks class methods effect each scenario in all feature files.
+	Unless you filter by a @tagName
+=======================================================
+
+TAKING SCREENSHOT USING SELENIUM:
+
+	We use TakesScreenShot interface in Selenium to take screenshot of the browser.
+	Normally, we take screenshot and save into the report when scenario or test fails.
+
+	Syntax:
+		((JavaScriptExecutor)driver).executeScript(...);
+
+		Taking screenshot:
+
+	2 steps:
+		TakesScreenshot screenshot = (TakesScreenshot)driver;
+		byte[] image=screenshot.getScreenshotAs(OutputType.BYTES);
+		The image is byte array and can be attached to the report.
+
+		If we want to save as a file, we need to change the type of output:
+
+		File imageFile = screenshot.getScreenshotAs(OutputType.FILE);
+		//copy the image file into the location,
+
+	1 step way:
+		byte[] image=((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
+
+		Then we attach the screenshot to the report
+
+	Since we are using Driver util class, instead of typing driver we type Driver.getDriver() to point to the webdriver object/browser.
+
+	Lets see how we can use it with @After tearDown method in the Hooks class:
+
+	@After
+	public void tearDownScenario(Scenario scenario) {
+		byte[] image=((TakesScreenshot)Driver.getDriver()).getScreenshotAs(OutputType.BYTES);
+		scenario.attach(image, "image/png", scenario.getName());
+
+		System.out.println("AFTER - tearDown method is running after the scenario:" + scenario.getName());
+        Driver.closeDriver();
+	}
+==================================
+
+WE NEED 2 STEPS TO TAKE SCREENSHOT OF BROWSER:
+	#1 Cast/Convert driver to TakesScreenshot interface
+	#2 Call takeScreenshotAs method and specify the output type: FILE, BYTE
+
+HOW DO YOU PUT THE SCREENSHOT INTO HTML REPORT IN YOUR FRAMEWORK:
+
+	I have Hooks class in my framework with @After annotated tearDown method.
+	So if a scenario fails, I take screenshot as byte[] array and attach to the report.
+
+	@After
+	public void tearDownScenario(Scenario scenario) {
+		if(scenario.isFailed()) {
+			byte[] image=((TakesScreenshot)Driver.getDriver()).getScreenshotAs(OutputType.BYTES);
+			scenario.attach(image, "image/png", scenario.getName());
+		}
+
+		System.out.println("AFTER - tearDown method is running after the scenario:" + scenario.getName());
+        Driver.closeDriver();
+	}
+
+-----------------
+
+How to take screenshot of each step to save as execution evidence:
+
+We can use @AfterStep annotation in Hooks class:
+
+@AfterStep
+public void tearDownStep(Scenario scenario) {
+	byte[] image=((TakesScreenshot)Driver.getDriver()).getScreenshotAs(OutputType.BYTES);
+	scenario.attach(image, "image/png", scenario.getName());
+}
+
+============================
+
+Why do we need to take screenshots of application?
+
+Whenever a test fails. (Expected result not matching to actual result)
+We need to document the evidence as a screenshot.
+We can use that in our bug report in Jira or share the screenshot with the team.
+========================
+
+When I see something fail:
+	- share screenshot in slack team channel with details of what is expected result and what is actual result.
+	- after team confirms this is a valid issue, I will go ahead and create a bug report story/ticket and add to backlog.
+	- depending on the bug severity:
+		- it might be added to current sprint, if it needs to be taken care of right away
+		- or it might added to the following sprint and assigned to a developer
+========================
+
+Ferhat Demir — Today at 8:50 PM
+A good bug report must have Bug ID/Number, Bug Title, Priority&Severity, Environment, Description, Steps to reproduce, Expected&Actual result, and Screenshot y'all.
+
+========================
+
+Scenario Outline in Cucumber BDD.
+
+We use Scenario Outline to perform Data driven test using Cucumber.
+
+Data Driven Test: Testing the functionality of the application using multiple sets of data/inputs/parameters.
+Login using mutiple credentials, we store username and passwords in a separate file and not in the code. and our automation code will read each one one by one and perform the test steps.
+
+Test Data and Automation code NEED TO BE SEPARATED.
+
+TestData can be stored in : Feature file Scenario outline
+						- Excel files
+						- Json files
+						- csv files
+						- yaml files
+						- text
+						- SQL database
+
+TestData -----> AutomationCode ----> Results for each set of data.
+
+--------------------------------------
+
+Lets learn how to do data driven testing using Cucumber Scenario Outline.
+
+Scenario outline:
+	- Lets run the test scenario with multiple sets of data
+	- scenario steps will automatically run for each data set in the Examples table
+	- we provide data in Examples table seperated with "|" pipes
+
+	EX:
+
+	Scenario Outline: Data driven test
+		Given User is at etsy homepage
+		And User searches for "<itemName>" in etsy
+		Then User should see at least "<expectedCount>" results
+		Examples:
+			|itemName|expectedCount|
+			|java mug|100|
+			|leather jacket|985|
+			|wooden spoon|2354|
+			|iphone case|5000|
+
+
+	Scenario Outline: Library login data driven test
+		Given User is at library login page
+		Then User logs in using "<email>" and "<password>"
+		Then Login should be successful
+		Examples:
+			|email|password|
+			|test1@mail.com|abc342|
+			|test2@mail.com|abc5442|
+			|test3@mail.com|abc042|
+
+
+add google_scenario_outline.feature
+
+@google_scenario_outline
+Feature: Data driven testing using Scenario outline with Examples table
+
+Scenario Outline: Google capital cities search
+Given User is on Google home page
+When User searches for "<country>" capital
+Then User should see "<capital>" in the result
+Examples:
+	| country| capital|
+	| USA    | Washington DC |
+	| Turkey | Ankara |
+	| Ukraine| Kyiv |
+	| Turkmenistan| Ashgabat |
+	| Latvia | Riga |
+	| Uzbekistan | Tashkent |
+	| Eritrea | Asmara |
