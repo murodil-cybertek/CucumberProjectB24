@@ -33,7 +33,7 @@ public class DiceJobSearchStepDefs {
         System.out.println("USER SHOULD SEE SEARCH RESULTS...");
         WebElement jobCount = Driver.getDriver().findElement(By.id("totalJobCount"));
         System.out.println("JOB COUNT = " + jobCount.getText());
-        Driver.closeDriver();
+       // Driver.closeDriver();
     }
 
 }
