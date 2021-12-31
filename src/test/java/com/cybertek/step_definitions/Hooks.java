@@ -44,12 +44,14 @@ public class Hooks {
      * -takes screenshot and attaches to the report for each step
      * -normally not needed but your project might require at some point.
      * @param scenario
-     */
 
-    @AfterStep
+
+    @AfterStep()
     public void tearDownStep(Scenario scenario) {
         byte[] image=((TakesScreenshot)Driver.getDriver()).getScreenshotAs(OutputType.BYTES);
         scenario.attach(image, "image/png", scenario.getName());
     }
+
+     */
 
 }

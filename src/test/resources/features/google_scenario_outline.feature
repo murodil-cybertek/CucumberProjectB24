@@ -14,3 +14,4 @@ Feature: Data driven testing using Scenario outline with Examples table
       | Latvia | Riga |
       | Uzbekistan | Tashkent |
       | Eritrea | Asmara |
+      | Afghanistan | Kabul |

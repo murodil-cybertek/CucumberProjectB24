@@ -61,7 +61,6 @@ public class Google_StepDefinitions {
     @Then("User should see {string} in the result")
     public void userShouldSeeInTheResult(String capitalCity) {
         System.out.println("Expected Capital City name: " + capitalCity);
+        Assert.assertEquals(capitalCity, searchPage.searchResultCityName.getText());
     }
-
-
 }
