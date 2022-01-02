@@ -1,0 +1,212 @@
+
+01/02/2022
+----------
+
+Wish you all happy 2022!
+
+Last year:
+	- Scenario outline with Examples table
+
+	Scenario and Scenario outline:
+
+Scenario -> similar to @Test in TestNG, combination of steps to test a functionality of application.
+- all steps run once and we can pass parameters to the steps
+
+Scenario outline -> is mainly used for data driven testing
+- used along with Examples table, where we pass sets of data
+ - all steps in the scenario outline repeat for each row of data in Examples table.
+=============================
+
+Datatable vs Examples table:
+	DataTable is used to pass parameters/list of data to a certain STEP:
+		Scenario: Look up names
+		When User clicks on students tab
+		Then students names should be present:
+			|Abdul|
+			|Irina|
+			|Ibrahim|
+			|Naserahmad|
+
+		- the above step will accept all student names as a List of string.
+		- that step will run only once and not repeatedly for each student name
+		- in the implementation, we can use loop and do any actions with the data
+
+	Examples table -> is used to pass data for the whole scenario and scenario will run repeatedly for each row of data
+
+	Scenario Outline: Student search
+
+		When User seaches for "<studentID>" in system
+		Then students "<name>" should be present
+		And student "<email>" should be visible
+		Examples:
+			|studentID|name|email|
+			|100	  |Abdul|Abdul@gmail.com|
+			|200	  |Irina|Irina@gmail.com|
+			|300	  |Ibrahim|Ibrahim@gmail.com|
+			|400	  |Naserahmad|Naserahmad@gmail.com|
+===============================================
+
+add cloudtables_ddt.feature
+
+cloudtables.url=https://editor.datatables.net
+
+@cloudtables
+Feature: DDT example with Cloudtables
+
+Scenario Outline: Adding multiple users to the table
+	Given User is on cloudtables homepage
+	When User clicks on New button
+	When User enters "<firstname>" to firstname field
+	And User enters "<lastname>" to lastname field
+	And User enters "<position>" to position field
+	And User enters "<salary>" to salary field
+	And User clicks on create button
+
+	Examples:
+		|firstname|lastname|position|salary|
+		|Janina   |R       |SDET    |115000|
+		|Nisso    |U       |Automation Engineer|150000|
+		|Kamila   |S       |Developer|130000|
+		|Fahima   |E       |UI Developer|180000|
+
+add new class in step_definitions package:
+	CloudTablesStepDefs
+
+add new class in pages package:
+	CloudTablesPage
+
+	- add constructor
+=================================
+
+How do you re-run the failed tests/scenarios?
+
+------------------
+
+Why? -> lets you have 100 tests/scenarios and you executed all of them. you see that 7 of them failed.
+Now we want to re-run those 7 only:
+	#1 one option could be : to identify failed scenarios and add @rerun tag for them and run CukesRunner with that that tag.
+	This is time consuming and not efficient way. Lets not do that.
+
+	#2 if we run the tests using maven. We can ask maven to re-run the test certain number of times if it fails.
+
+	mvn -Dsurefire.rerunFailingTestsCount=1 test
+
+	For the above to work, we need to use maven command line commands to run our tests.
+	-Dsurefire.rerunFailingTestsCount=1 => is a parameter that we pass , 1 means reRun the test/scenario ONCE if it fails. we can change that number to a different one and try like that.
+
+	#3 Using Cucumber runner Plugin:
+		#1 Add a "rerun:target/rerun.txt" to our CukesRunner plugins. and it will collect the failed scenarios into a text file
+
+		#2 Add a separate CukesRunner that picks up that file and runs each scenario in that text file:
+
+		@RunWith(Cucumber.class)
+		@CucumberOptions(
+	        features = "@target/rerun.txt",
+	        glue = "com/cybertek/step_definitions"
+		)
+		public class FailedTestsRunner {
+
+		}
+
+		---> Main CukesRunner will run the tests and collect all failed ones to rerun.txt file.
+		---> Then when we run the new FailedTestsRunner, it will read rerun.txt file and run only Those - 1 time.
+
+========================================
+
+Why rerun a failed test:
+	- to make sure that this is actual application issue/bug , not automation code issue.
+		-lets say it is passing the second time:
+			-> it might mean our automation code needs some updates.
+			-> it also might mean that application is not stable.
+
+Purpose is not just to pass the failed tests, but it is to see if it is repeatedly fails or it passes next time.
+
+Again, as we mentioned, it if repeatedly fails, it might mean application has a bug, provided your automation code is testing correctly.
+
+If it fails then passes, it might mean :
+	- we need to analyze the reason for the failure
+	- sometimes it is automation syncronization issue
+	- sometimes automation test data is corrupted
+
+	- or it maybe real application issue that comes and goes.
+
+=================================
+
+Summary:
+	-> when a test fails, I analyze the reason for the failure.
+	-> I read my framework automation html reports and look at screenshots
+	-> I try to follow the test steps manually to see if it works manually
+	-> I also have mechanism in my framework to re-run the failed tests/scenarios.
+
+	After all above, if it is automation code issues, like sync issues, or test data, or locator, I will go ahead and update my automation code.
+	If it is application issues, I report it to the team then create a bug in Jira.
+
+========================
+
+How do you re-run the failed tests/scenarios?
+
+Since I have Cucumber BDD framework:
+	#1) add:
+		"rerun:target/rerun.txt" to CukesRunner
+		EX:
+		@RunWith(Cucumber.class)
+		@CucumberOptions(
+        plugin = {
+                "html:target/cucumber-report.html",
+                "rerun:target/rerun.txt"
+        },
+        features = "src/test/resources/features",
+        glue = "com/cybertek/step_definitions",
+        dryRun = false, //false=> run the test. true => check for missing steps
+        tags = "@cloudtables"
+)
+public class CukesRunner {
+}
+
+	#2) Add new runner for FailedTests:
+
+		@RunWith(Cucumber.class)
+		@CucumberOptions(
+	        features = "@target/rerun.txt",
+	        glue = "com/cybertek/step_definitions"
+		)
+		public class FailedTestsRunner {
+
+		}
+====================
+
+How do you rerun failed scenarios in your framework?
+
+In my CukesRunner , I have a plugin that starts with "rerun:target/rerun.txt". So When I execute my scenarios , the failed scenarios will automatically goto rerun.txt file.
+
+Then I have a dedicated FailedTestsRunner class to run the scenarios that are in rerun.txt.
+So If I see any failed scenarios, I run the FailedTestsRunner and analyze the results.
+
+It is useful to make sure that if a test fails, it is indeed a bug and NOT a automation code issue. If it is automation issue -> I will update my code accordingly.
+If it is a application bug, I will go ahead and report it.
+========================
+
+How do you do parallel execution of your tests in your framework?
+
+I use maven surefire plugin to perform multi threaded parallel execution of my tests.
+
+=========================
+
+100 tests --> 1 browser --> 100 mins
+100 tests --> 4 browsers --> 25 mins
+100 tests --> 10 browsers --> 10 mins
+
+When we have many tests, we can execute them in parellel mode, so multiple tests/scenarios run at same time.
+
+To support that, we need to change our Driver class, it should have driver pool, instead of single driver.
+private static ThreadLocal<WebDriver> driverPool = new ThreadLocal<>();
+
+ThreadLocal<WebDriver> -> will allow us to open multiple webdrivers at same time.
+If we have single static webdriver like before, we will not be able to perform parallel execution.
+
+Run all tests using:
+
+ mvn clean verify
+ 	Command enter
+ 	Control Enter
+
