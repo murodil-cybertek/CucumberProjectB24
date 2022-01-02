@@ -10,9 +10,9 @@ import java.util.concurrent.TimeUnit;
 public class Driver {
 
     /*
-    Creating the private constructor so this class' object
-    is not reachable from outside
-     */
+     Creating the private constructor so this class' object
+     is not reachable from outside
+      */
     private Driver() {
     }
 
@@ -75,6 +75,5 @@ public class Driver {
             driverPool.remove();
         }
     }
-
 
 }
