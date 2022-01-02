@@ -9,7 +9,6 @@ Feature: DDT example with Cloudtables
     And User enters "<position>" to position field
     And User enters "<salary>" to salary field
     And User clicks on create button
-
     Examples:
       |firstname|lastname|position|salary|
       |Janina   |R       |SDET    |115000|
