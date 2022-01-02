@@ -15,3 +15,5 @@ Feature: DDT example with Cloudtables
       |Nisso    |U       |Automation Engineer|150000|
       |Kamila   |S       |Developer|130000|
       |Fahima   |E       |UI Developer|180000|
+      |Adalet   |P       |Scrum Master|200000|
+      |Naserahmad |J     |PO          |110000|
