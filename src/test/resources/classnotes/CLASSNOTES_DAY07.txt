@@ -1,0 +1,128 @@
+
+01/05/2022
+----------
+
+-Review of rerun, parallel execution, reporting
+-Excel automation
+
+RERUN:
+	- add rerun plugin to CukesRunner
+		"rerun:target/rerun.txt"
+	- it will store failed scenarios into a txt file
+	- add FailedTestsRunner and point to that txt file
+		features="@target/rerun.txt"
+	- it will run only those failed scenarios
+
+PARALLEL EXECUTION/MULTI THREADED EXECUTION:
+	- add maven surefire plugin to pom.xml
+	- add configuration to run methods as parallel
+	- specify maximum thread count
+	- include runner classes
+		<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+                    <parallel>methods</parallel>
+                    <threadCount>5</threadCount>
+                    <perCoreThreadCount>false</perCoreThreadCount>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <includes>
+                        <include>**/CukesRunner*.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+
+    #2 -> Driver utility class is singleton, we need to wrap WebDriver with ThreadLocal class object
+    - it will allow creating and accessing multiple WebDriver objects in parallel mode
+  ===================================
+
+CUCUMBER HTML REPORT:
+	- there is cucumber built in html report that we specify using the plugin in the runner:
+		->"html:target/cucumber-report.html"
+	- if we want nicer looking report with more details and similar to a dashboard
+	- we can use "maven-cucumber-reporting" maven plug in
+	- it is developed by Damian Szczepanik
+	- we add the plugin to pom.xml
+		<plugin>
+                <groupId>net.masterthought</groupId>
+                <artifactId>maven-cucumber-reporting</artifactId>
+                <version>5.4.0</version>
+                .....
+    - we need to add json plugin to cukesRunner
+    	"json:target/cucumber.json"
+
+    - when scenarios are executed, all the execution details are saved as json data in cucumber.json file
+    - then maven-cucumber-reporting plugin will read the content of that file and create a nice looking html report
+--------------------------------------
+
+MICROSOFT OFFICE files:
+	- Excel
+	- Word
+	- Powerpoint
+	- outlook
+	- access
+
+We can automation actions that we do in MS Office program files using Java.
+We can use Apache POI library for MS office files automation.
+
+How to use it:
+	#1 - look up Apache POI dependency in mvnrepository
+	#2 - add the dependency to pom xml
+	<dependency>
+	    <groupId>org.apache.poi</groupId>
+	    <artifactId>poi-ooxml</artifactId>
+	    <version>5.1.0</version>
+	</dependency>
+
+Apache POI -> Poor Obfuscation Implementation
+
+It is a library provided by Apache Foundation. We use many apache libraries in projects.
+
+It can automate MS office files.
+
+Today we will go over basics of reading and writing with MS Excel.
+
+Excel Extensions:
+	xls -> old one
+	xlsx -> newer one
+
+First lets open new MS Excel document and save in out project:
+	- open excel > add columns and Data
+	- save to desktop as Employees.xlsx
+	- right click and copy
+	- goto intellij and right click on project name and paste
+	- or we can drag and drop
+
+Excel hierarchy:
+	Workbook > Worksheet > Row > Cell
+
+How to read using Apache POI:
+	XSSFWorkbook > XSSFSheet > XSSFRow > XSSFCell
+
+XSSF -> Xml spreadsheet format.
+It is used for working with xlsx files.
+If your file is old version like xls,
+then we need to use HSSFWorkbook etc
+
+XSSFWorkbook -> xlsx
+HSSFWorkbook -> xls
+
+HSSF -> Horrible Spreadsheet format
+============================
+
+I use apache POI library to read and write from excel files.
+
+Open Workbook:
+	 XSSFWorkbook workbook = new XSSFWorkbook("Employees.xlsx");
+In Computer path:
+ XSSFWorkbook workbook = new XSSFWorkbook("/Users/cybertekb24/Desktop/Employees.xlsx");
+
+Goto specific worksheet:
+	XSSFSheet worksheet = workbook.getSheet("data");
+
+Goto Row 1 and Cell 1:
+	System.out.println(worksheet.getRow(1).getCell(1));
+
+	emailElem.sendKeys(worksheet.getRow(1).getCell(1));
+==========================================
