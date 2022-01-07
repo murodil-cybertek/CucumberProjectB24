@@ -33,10 +33,10 @@ public class ExcelReadActions {
         //find out number of rows in the worksheet
         //
         int rowsCount = dataSheet.getPhysicalNumberOfRows();
-        System.out.println("rowsCount = " + rowsCount);
+        System.out.println("rowsCount = " + rowsCount); //8 -> Count starts at 1
 
         int usedRowsCount = dataSheet.getLastRowNum();
-        System.out.println("usedRowsCount = " + usedRowsCount);//7.
+        System.out.println("usedRowsCount = " + usedRowsCount);//7 -> Count starts at 0
 
         //print all first names using a loop
         System.out.println("ALL FIRST NAMES:");
@@ -44,6 +44,18 @@ public class ExcelReadActions {
             System.out.println(dataSheet.getRow(i).getCell(0));
         }
 
+        //loop and find "Fahima" in firstname column.
+        //print her first | lastname | job id then exit loop
+
+        System.out.println("\nFAHIMA INFO:");
+        for (int i = 1; i <= dataSheet.getLastRowNum(); i++) {
+            if (dataSheet.getRow(i).getCell(0).toString().equals("Fahima")) {
+                System.out.println(dataSheet.getRow(i).getCell(0) +" | "+
+                        dataSheet.getRow(i).getCell(1) +" | "+
+                        dataSheet.getRow(i).getCell(2) );
+                break;
+            }
+        }
 
     }
 }
