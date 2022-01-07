@@ -1,0 +1,154 @@
+
+01/06/2022
+
+Excel Automation Basics Day 2
+-----------------------------
+
+Jenkins, Selenium Grid ==> Vasyl
+SQL + JDBC -> Another Deep Instructor
+Rest API Automation -> Me - save some battery for API
+Interview Review Bootcamp -> 10 days
+
+Yesterday:
+	- Excel Reading using Apache POI library
+
+	-> installed MS Excel
+	-> added apache poi dependency to pom.xml
+	-> added excel file with data
+	-> XLS file -> HSSFWorkbook > HSSFSheet > HSSFRow > HSSFCell
+	-> XLSX file -> XSSFWorkbook > XSSFSheet > XSSFRow > XSSFCell
+
+doc -> docx
+
+I use apache POI library to read and write from excel files.
+
+Open Workbook:
+	 XSSFWorkbook workbook = new XSSFWorkbook("Employees.xlsx");
+In Computer path:
+ XSSFWorkbook workbook = new XSSFWorkbook("/Users/cybertekb24/Desktop/Employees.xlsx");
+
+Goto specific worksheet:
+	XSSFSheet worksheet = workbook.getSheet("data");
+
+Goto Row 1 and Cell 1:
+	System.out.println(worksheet.getRow(1).getCell(1));
+
+	emailElem.sendKeys(worksheet.getRow(1).getCell(1));
+===============================
+
+add new class in tests package:
+	ExcelReadActions
+
+@Test
+public void readExcelSheetData() {
+
+}
+
+=============
+
+Count number of rows:
+
+#1 - getPhysicalNumberOfRows() method
+//find out number of rows in the worksheet
+
+int rowsCount = dataSheet.getPhysicalNumberOfRows();
+System.out.println("rowsCount = " + rowsCount);
+
+-this method starts counting from 1. and not 0.
+-if there are empty rows in between, it will not count them.
+- it ignores empty rows
+EX:
+	row with data
+	row with data
+	Row with empty
+	row with data
+Result will be 3. because we have empty row
+
+#2 - getLastRowNum() method:
+
+int usedRowsCount = dataSheet.getLastRowNum();
+System.out.println("usedRowsCount = " + usedRowsCount);
+
+- it starts counting from 0
+- it counts empty rows as well
+- good fit to use with for loop, especially if there are empty rows
+
+	row with data
+	Row with empty
+	Row with empty
+	row with data
+It will return 3. since it starts counting from 0.
+============================
+
+Huseyin Lucas Aydin — Today at 8:29 PM
+why toString Murodil? Because dataSheet.getRow(i).getCell(0) doesn't return String?
+
+dataSheet.getRow(i).getCell(0) ==> returns XSSFCell object
+if we just print it, it will print as String
+but
+if we want to compare, we need to toString() first, convert to String object first then check condition
+
+if (dataSheet.getRow(i).getCell(0).toString().equals("Fahima")) {
+                System.out.println(dataSheet.getRow(i).getCell(0) +" | "+
+                        dataSheet.getRow(i).getCell(0) );
+            }
+
+
+Ferhat Demir — Today at 8:36 PM
+@Murodil if there is an empty cell between rows, it is getting nullpointerexception. How do we handle it?
+- we can check if cell is not Null using condition
+
+if (dataSheet.getRow(0).getCell(0) != null)
+
+=========================
+
+HOW TO WRITE INTO EXCEL FILE?
+
+#1 Open the workbook using FileInputputStream
+
+FileInputputStream fis = new FileInputputStream("Employees.xlsx");
+XSSFWorkbook workbook = new XSSFWorkbook(fis);
+
+#2 Goto the worksheet
+ XSSFSheet sheet = workbook.getSheetAt(0);
+
+#3 if the cell was empty, we need to first create it.
+	XSSFCell cell = sheet.getRow(0).createCell(3);
+
+#4 Type the value using setCellValue method:
+	cell.setCellValue("Salary");
+
+#5 To save changes, we need to open file using outPutStream:
+
+FileOutputStream outputStream = new FileOutputStream(filePath);
+//save/write changes to the workbook
+ workbook.write(outputStream);
+
+#6 close streams and workbook. good to do.
+
+outputStream.close();
+workbook.close();
+in.close();
+========================
+
+How to write into excel file ?
+I open the workbook and use setCellValue method to write into a cell. Then we save the changes using FileOutPutStream. and worbook.write method.
+
+========================
+
+DDT using Excel:
+	Data Driven Test using Excel file:
+
+	We store all credentials/test data into Excel file.
+	Then Loop through the data in the excel file and login to vytrack
+	if login is successful > we type pass to Result column.
+	If login fails > we type fail to Result column
+
+========================
+Monday, Tuesday ==> Jan 10 , 11
+4 PM -> 6:50 PM EST practice
+
+Excel DDT, Some framework Interview questions.
+
+Review
+========================
