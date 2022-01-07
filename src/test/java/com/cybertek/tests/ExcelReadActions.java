@@ -31,8 +31,19 @@ public class ExcelReadActions {
         }
 
         //find out number of rows in the worksheet
+        //
         int rowsCount = dataSheet.getPhysicalNumberOfRows();
         System.out.println("rowsCount = " + rowsCount);
+
+        int usedRowsCount = dataSheet.getLastRowNum();
+        System.out.println("usedRowsCount = " + usedRowsCount);//7.
+
+        //print all first names using a loop
+        System.out.println("ALL FIRST NAMES:");
+        for (int i = 1; i <= usedRowsCount; i++) {
+            System.out.println(dataSheet.getRow(i).getCell(0));
+        }
+
 
     }
 }
