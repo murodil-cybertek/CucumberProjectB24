@@ -5,7 +5,13 @@ import org.openqa.selenium.support.FindBy;
 
 public class VyTrackLoginPage extends BasePage {
     //no need for @FindBy, since "name" in html is matching variable name
+//    public WebElement _username;
+//    public WebElement _password;
+
+    @FindBy(name = "_username")
     public WebElement _username;
+
+    @FindBy(name = "_password")
     public WebElement _password;
 
     @FindBy(id = "_submit")
