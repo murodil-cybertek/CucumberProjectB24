@@ -46,8 +46,6 @@ public class VyTrackLoginDDTTest {
 
         dashboardPage.logout();
 
-        dashboardPage.fullName.click();
-        dashboardPage.logOutLink.click();
 
     }
 
