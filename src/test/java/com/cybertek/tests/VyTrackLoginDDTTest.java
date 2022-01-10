@@ -1,5 +1,6 @@
 package com.cybertek.tests;
 
+import com.cybertek.pages.VyTrackDashboardPage;
 import com.cybertek.pages.VyTrackLoginPage;
 import com.cybertek.utilities.ConfigurationReader;
 import com.cybertek.utilities.Driver;
@@ -29,8 +30,16 @@ public class VyTrackLoginDDTTest {
        VyTrackLoginPage loginPage = new VyTrackLoginPage();
        loginPage.login(userName, password);
 
+       VyTrackDashboardPage dashboardPage = new VyTrackDashboardPage();
+       System.out.println("Full name = " + dashboardPage.fullName.getText());
 
+       String actualFullName = dashboardPage.fullName.getText();
 
+       if(actualFullName.contains(firstName) && actualFullName.contains(lastName)) {
+           System.out.println("PASS");
+       } else {
+           System.out.println("FAIL");
+       }
 
     }
 
