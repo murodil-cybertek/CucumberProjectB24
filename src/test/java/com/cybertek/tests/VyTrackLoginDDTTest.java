@@ -5,6 +5,7 @@ import com.cybertek.pages.VyTrackLoginPage;
 import com.cybertek.utilities.ConfigurationReader;
 import com.cybertek.utilities.Driver;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,11 +36,18 @@ public class VyTrackLoginDDTTest {
 
        String actualFullName = dashboardPage.fullName.getText();
 
+       // Assert.assertTrue(actualFullName.contains(firstName) && actualFullName.contains(lastName));
+
        if(actualFullName.contains(firstName) && actualFullName.contains(lastName)) {
            System.out.println("PASS");
        } else {
            System.out.println("FAIL");
        }
+
+        dashboardPage.logout();
+
+        dashboardPage.fullName.click();
+        dashboardPage.logOutLink.click();
 
     }
 
