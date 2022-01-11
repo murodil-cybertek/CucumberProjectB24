@@ -1,13 +1,17 @@
 package com.cybertek.step_definitions;
 
 import com.cybertek.pages.MockarooPage;
+import com.cybertek.utilities.BrowserUtils;
 import com.cybertek.utilities.ConfigurationReader;
 import com.cybertek.utilities.Driver;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MockarooStepDefs {
@@ -35,11 +39,28 @@ public class MockarooStepDefs {
 
     @When("User clicks on preview")
     public void user_clicks_on_preview() {
-
+        mockarooPage.previewBtn.click();
     }
 
     @Then("following columns should be displayed:")
     public void following_columns_should_be_displayed(List<String> expectedColumns) {
+        System.out.println("ExpectedColumns = " + expectedColumns);
+
+        //List<WebElement> => getText() => List<String> actualColumns => Compare with expectedColumns
+
+        List<String> actualColumns = new ArrayList<>();
+
+        //Read text of each tableHeader and Store into actualColumns list
+        for (WebElement headerName : mockarooPage.tableHeaders) {
+            actualColumns.add( headerName.getText() );
+        }
+
+        //using BrowserUtils method
+        List<String> actualHeaderNames = BrowserUtils.getElementsText(mockarooPage.tableHeaders);
+
+        //compare that expectedColumns from feature file matching actual columns
+        Assert.assertEquals(expectedColumns , actualColumns);
+        Assert.assertEquals(expectedColumns , actualHeaderNames);
 
     }
 

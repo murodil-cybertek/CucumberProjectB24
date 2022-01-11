@@ -15,6 +15,11 @@ import static org.junit.Assert.assertTrue;
 
 public class BrowserUtils {
 
+    public static void scrollDown(int pixels) {
+        JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+        js.executeScript("window.scrollBy(0, "+ pixels +")");
+    }
+
     /**
     This method accepts String expected title
     @param expectedTitle
