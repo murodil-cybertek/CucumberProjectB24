@@ -1,0 +1,83 @@
+
+01/11/2022
+----------
+
+Office hours practice with Cucumber , WebTable, Excel
+
+mockaroo.url=https://mockaroo.com
+
+mockaroo.feature
+
+@Mockaroo
+Feature: Mockaroo random data generation
+
+Background:
+    Given User is on mockaroo homepage
+    And Number of rows is 100
+    And Format is Excel
+
+Scenario: Generate 100 rows of random data
+    When User clicks on preview
+    Then following columns should be displayed:
+        |id           |
+        |first_name   |
+        |last_name    |
+        |email        |
+        |gender        |
+        |ip_address |
+    And 100 rows of data should be displayed
+==========================
+
+Cucumber Gherkin keywords:
+	Feature, Background, Scenario, Given , And, When, Then, Not
+	Scenario outline, Examples
+
+We can also add tags to be able to run individually
+- add tag to scenario or feature level
+@Mockaroo
+- add the tag to CukesRunner
+==========================
+
+MockarooStepDefs
+
+MockarooPage
+	-> Page Object is a java class dedicated for a page in an application
+	-> Each application web page will have a page object java class
+	-> WebElements and locators on that particular page of application
+	-> Reusable methods to perform actions on that page
+	-> Constructor with PageFactory.initElements method
+
+
+WebTable:
+	<table>
+		<thead>
+			<tr>
+				<th>First column</th>
+				<th>Second column</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>Java</td>
+				<td>Version 1.8</td>
+			</tr>
+			<tr>
+				<td>Selenium</td>
+				<td>Version 3.14</td>
+			</tr>
+		</tbody>
+
+	</table>
+
+Scenario: Download 100 rows of random data
+    When User clicks on download
+    Then following columns should be displayed in excel file:
+      |id           |
+      |first_name   |
+      |last_name    |
+      |email        |
+      |gender       |
+      |ip_address   |
+    And 100 rows of data should be displayed in excel file
+
