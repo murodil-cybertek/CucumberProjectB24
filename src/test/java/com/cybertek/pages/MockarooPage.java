@@ -14,4 +14,8 @@ public class MockarooPage extends BasePage {
     @FindBy(xpath = "//li[.='Excel']")
     public WebElement excelOption;
 
+    public void selectExcelFormat() {
+        formatDropDown.click();
+        excelOption.click();
+    }
 }
