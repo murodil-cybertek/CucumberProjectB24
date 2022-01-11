@@ -16,3 +16,14 @@ Feature: Mockaroo random data generation
       |gender       |
       |ip_address   |
     And 100 rows of data should be displayed
+
+  Scenario: Download 100 rows of random data
+    When User clicks on download
+    Then following columns should be displayed in excel file:
+      |id           |
+      |first_name   |
+      |last_name    |
+      |email        |
+      |gender       |
+      |ip_address   |
+    And 100 rows of data should be displayed in excel file

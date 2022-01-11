@@ -26,6 +26,9 @@ public class MockarooPage extends BasePage {
     @FindBy(xpath = "//table/tbody/tr")
     public List<WebElement> tableRows;
 
+    @FindBy(xpath = "//span[.='Download Data']")
+    public WebElement downloadBtn;
+
     public void selectExcelFormat() {
         BrowserUtils.scrollDown(500);
         formatDropDown.click();
