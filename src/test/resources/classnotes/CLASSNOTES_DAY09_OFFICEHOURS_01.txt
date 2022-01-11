@@ -1,0 +1,140 @@
+
+01/10/2022
+----------
+
+Data Driven Test using Excel.
+
+VyTrack login test
+	goto login page
+	enter username and password
+	verify user logged in successfully:
+		-> title or label or firstname and lastname
+	logout
+
+vytrack.url=https://qa2.vytrack.com/user/login
+
+====================================================
+
+#1 => write automation code for single set of data and make it work
+
+#2 => link automation code to external data source like Excel, json, scenario outline examples table etc
+
+#3 => design a loop to go through each row/record and verify
+
+#4 => post the result (pass/fail) back into excel sheet
+
+=====================================================
+
+TestNG -> BeforeMethod . AfterMethod
+JUnit -> Before . After
+
+Both of these annotations run before and after each @Test method
+
+==================
+
+
+#1 => write automation code for single set of data and make it work
+
+1) url is in config.properties and navigation code is ready
+2) declared all variables with values
+3) Page object model to write automation code for entering username, password and login btn:
+	-> add WebElements for 3 elements
+	-> methods to perform actions on the page:
+		login(String userName, String pwd)
+
+VyTrackLoginPage extends BasePage
+
+public abstract class BasePage {
+	public BasePage() {
+		PageFactory.initElements(Driver.getDriver(), this);
+	}
+}
+
+Why BasePage is abstract?
+
+-> purpose is to be a parent class for concrete page object classes
+-> provide/share reusable constructor or any other method / variable
+-> we do not want to grant ability to create object of BasePage, because anyone can add some elements to it and use it in there tests:
+
+	BasePage bp = new BasePage();
+	bp.userName.sendKeys("user1")
+
+	INSTEAD:
+
+	VyTrackLoginPage bp = new VyTrackLoginPage();
+	bp.userName.sendKeys("user1");
+==================================================
+
+Mehmet Kopru — Today at 4:41 PM
+so can we reach BasePage methods and variables if we use VyTrackLoginPage since it's child of the abstract
+
+Yes, if they are not private. private variables and methods are not inherited to child classes
+
+public class VyTrackLoginPage extends BasePage {
+    public WebElement _username;
+    public WebElement _password;
+}
+
+we do not need to put @FindBy(name="_username") for those elements, because selenium will automatically search for elements with matching name or id to the variable name.
+
+<input type="text" id="prependedInput" class="span2" name="_username" value="" required="required" placeholder="Username or Email" autofocus="">
+
+<input type="password" id="prependedInput2" class="span2" name="_password" required="required" placeholder="Password" autocomplete="off">
+
+as you can see from html, the Name attribute matching the WebElement variable names. So we do not have to add @FindBy.
+Only works when variable name and NAME /ID properties match.
+
+<input type="password" id="prependedInput2" class="span2"  required="required" placeholder="Password" autocomplete="off">
+
+Please use this approach when id or name properties can be named as variables name: needs to make sense, needs to technically allowed.
+==========================
+
+//li[@id='user-menu']/a
+
+Need VyTrackDashboardPage
+
+Valentina Grinchuk — Today at 5:36 PM
+once we graduate and find a job we'll buy you a new computer 😉
+
+==============================================================
+Adding methods to page object classes make our test code more readable and maintainable/reusable.
+
+dashboardPage.logout();
+
+Instead of:
+
+dashboardPage.fullName.click();
+dashboardPage.logOutLink.click();
+
+======================
+
+#2 => link automation code to external data source like Excel, json, scenario outline examples table etc
+
+#3 => design a loop to go through each row/record and verify
+
+#4 => post the result (pass/fail) back into excel sheet
+
+
+Lets add code for excel reading :
+
+
+
+Matthew Oldenburg — Today at 6:15 PM
+since our test page where we are accessing the Excel file is in not in the same folder as the Excel file, how does it know where to look for that file since we're not providing the whole path?
+
+Yes, when we type  String filePath = "VyTrackQa2Users.xlsx";
+without any folder name, java automatically looks for the file in project Root folder, next to pom.xml
+
+=========================
+
+Feyruz Shahmuradov — Today at 6:44 PM
+If anyone wants to prractice Collections on this task. It might be helpfull to talk on the interview how you use Collections (List and Map)
+
+Approach:
+-try to add exell data into expected ArrayList or String LinkedHashMap (to keep the insertion order)
+-then loop trough and login in and store the actual names into Arraylist or LinkedHashMap (name and last name >  key=value format)
+-Then loop again compare the expected ArrrayList or LInkedHashMap to the actual ArrrayList or LInkedHashMap
+
+It is coplicated but good practice for Collections.
+======================================================
+
