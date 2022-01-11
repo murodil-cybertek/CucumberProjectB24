@@ -23,6 +23,9 @@ public class MockarooPage extends BasePage {
     @FindBy(xpath = "//table//th")
     public List<WebElement> tableHeaders;
 
+    @FindBy(xpath = "//table/tbody/tr")
+    public List<WebElement> tableRows;
+
     public void selectExcelFormat() {
         BrowserUtils.scrollDown(500);
         formatDropDown.click();

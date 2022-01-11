@@ -65,7 +65,7 @@ public class MockarooStepDefs {
     }
 
     @Then("{int} rows of data should be displayed")
-    public void rows_of_data_should_be_displayed(Integer int1) {
-
+    public void rows_of_data_should_be_displayed(int expectedRowsCount) {
+        Assert.assertEquals(expectedRowsCount, mockarooPage.tableRows.size());
     }
 }
