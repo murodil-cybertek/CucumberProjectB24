@@ -78,6 +78,8 @@ public class MockarooStepDefs {
         mockarooPage.downloadBtn.click();
     }
 
+    int excelFileRowsCount;
+
     @Then("following columns should be displayed in excel file:")
     public void followingColumnsShouldBeDisplayedInExcelFile(List<String> expectedColumns)  throws Exception {
         //Open downloaded excel file
@@ -87,6 +89,7 @@ public class MockarooStepDefs {
         XSSFSheet worksheet = workbook.getSheetAt(0);
         //get number of column names. top row and cells count
         int excelHeadersCount = worksheet.getRow(0).getPhysicalNumberOfCells();
+        excelFileRowsCount = worksheet.getLastRowNum();
 
         List<String> actualColumns = new ArrayList<>();
 
@@ -100,7 +103,7 @@ public class MockarooStepDefs {
     }
 
     @And("{int} rows of data should be displayed in excel file")
-    public void rowsOfDataShouldBeDisplayedInExcelFile(int arg0) {
-
+    public void rowsOfDataShouldBeDisplayedInExcelFile(int numberOfRows) {
+        Assert.assertEquals(numberOfRows , excelFileRowsCount);
     }
 }
