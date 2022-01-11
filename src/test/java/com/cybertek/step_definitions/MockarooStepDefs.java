@@ -28,7 +28,8 @@ public class MockarooStepDefs {
 
     @Given("Format is Excel")
     public void format_is_excel() {
-
+        mockarooPage.formatDropDown.click();
+        mockarooPage.excelOption.click();
     }
 
     @When("User clicks on preview")
