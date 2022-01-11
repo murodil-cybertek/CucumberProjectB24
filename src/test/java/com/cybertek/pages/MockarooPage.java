@@ -1,5 +1,6 @@
 package com.cybertek.pages;
 
+import com.cybertek.utilities.BrowserUtils;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -15,6 +16,7 @@ public class MockarooPage extends BasePage {
     public WebElement excelOption;
 
     public void selectExcelFormat() {
+        //BrowserUtils.
         formatDropDown.click();
         excelOption.click();
     }
