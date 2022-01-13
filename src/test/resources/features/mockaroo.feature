@@ -27,3 +27,4 @@ Feature: Mockaroo random data generation
       |gender       |
       |ip_address   |
     And 101 rows of data should be displayed in excel file
+    And data should be present in excel file

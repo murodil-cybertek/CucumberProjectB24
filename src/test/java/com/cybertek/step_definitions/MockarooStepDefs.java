@@ -79,13 +79,13 @@ public class MockarooStepDefs {
         mockarooPage.downloadBtn.click();
     }
 
-    int excelFileRowsCount;
-
     @Then("following columns should be displayed in excel file:")
     public void followingColumnsShouldBeDisplayedInExcelFile(List<String> expectedColumns)  throws Exception {
         //Open downloaded excel file
         String filePath = System.getProperty("user.home") + "/Downloads/MOCK_DATA.xlsx";
+        //open excel file using ExcelUtil
         ExcelUtil excel = new ExcelUtil(filePath, "data");
+        //read and compare column names using ExcelUtil getColumnsNames method
         Assert.assertEquals(expectedColumns, excel.getColumnsNames());
 
 //        FileInputStream in = new FileInputStream(filePath);
@@ -105,12 +105,19 @@ public class MockarooStepDefs {
 //        Assert.assertEquals(expectedColumns, actualColumns);
 
     }
+    String filePath = System.getProperty("user.home") + "/Downloads/MOCK_DATA.xlsx";
 
     @And("{int} rows of data should be displayed in excel file")
     public void rowsOfDataShouldBeDisplayedInExcelFile(int numberOfRows) {
-        String filePath = System.getProperty("user.home") + "/Downloads/MOCK_DATA.xlsx";
         ExcelUtil excel = new ExcelUtil(filePath, "data");
-        excelFileRowsCount = excel.rowCount();
+        int excelFileRowsCount = excel.rowCount();
         Assert.assertEquals(numberOfRows , excelFileRowsCount);
+    }
+
+    @And("data should be present in excel file")
+    public void dataShouldBePresentInExcelFile() {
+        //open excel file, read data and print values.
+        ExcelUtil excel = new ExcelUtil(filePath, "data");
+        System.out.println("Excel file data: " + excel.getDataList());
     }
 }

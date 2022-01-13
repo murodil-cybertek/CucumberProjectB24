@@ -1,0 +1,59 @@
+
+01/13/2022
+----------
+
+Office hours practice session.
+-----------------------------
+
+Please add new class in utilities package:
+
+ExcelUtil
+
+ExcelUtil excel = new ExcelUtil("Employees.xlsx","data");
+
+println(excel.getColumnsNames());
+println(excel.getDataList());
+===================
+
+CUCUMBER BDD FRAMEWORK:
+	- Java 8 as programming language
+	- Selenium 3.141 as automation tool
+	- Maven as Build tool and for dependency management with pom.xml
+	- Cucumber as BDD tool
+	- Apache POI to read from excel files
+	- Git+github for version control
+	-I use Junit as a testing framework, it helps out with annotations and assertions.
+	-----------------
+	PAGES: Page Object model -> I follow POM design to organize page object classes and webelements
+
+	Utilities: -> I write different utility classes for reusability. Like ExcelUtil, Driver, BrowserUtils, WebTableUtil.
+
+	STEP_DEFINITIONS: For each step in cucumber bdd scenario, I write step imlementation in Step Defititions class
+
+	RUNNERS: CukesRunner class helps us execute all or selected scenarios.
+
+	FEATURES: Cucumber Feature files. It is written using Gherkin syntax, and helps with understanding of what is being automated and tested for all team members.
+	- it also helps with reusability of automated steps
+
+	Feature file/Cucumber Scenario ---> Step Definition --> Page Objects, Assertions, Utilities
+============================================
+
+ExcelUtil -> helps with reading , writing to excel files.
+
+In my project, I used excel file reading using Apache POI.
+And I did Data driven testing using Excel. where my test data is located in Excel. and my code reads each row and runs automation test with that.
+
+Also In my project, there are downloadable several excel reports, which I had to validate if the data in file is matching the expected data.
+==================================
+
+CHALLENGE:
+	In my application, there are pages with data that is displayed on the web page as webtable format.
+	I had to validate that the excel report that can be downloaded matches the data on Webtable.
+
+-> I wrote reusable utility methods/classes to read data from excel file and return in java data structures format. Like List of Maps.
+
+-> So my code reads data of Excel file and stores into List of maps, and also reads data in Webtable on the browser and stores as another List of maps.
+Then using Junit assertions, I would assert that both lists are exactly matching.
+
+-> also challenge was sometimes data format on the browser is different than in excel file
+======================================
