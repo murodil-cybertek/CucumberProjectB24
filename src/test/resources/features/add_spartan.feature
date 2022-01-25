@@ -6,7 +6,7 @@ Feature: Add new spartan
     And clicks on add spartan
     And enters following data and submits:
       | name | Wooden Tester |
-      | gender | male |
+      | gender | Male |
       | phone | 1231231234 |
     Then success message should be displayed
     And data on confirmation page must be same
