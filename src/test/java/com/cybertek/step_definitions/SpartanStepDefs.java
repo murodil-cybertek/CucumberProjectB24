@@ -36,6 +36,7 @@ public class SpartanStepDefs {
         addSpartanPage.name.sendKeys(spartanInfo.get("name"));
         addSpartanPage.selectGender(spartanInfo.get("gender"));
         addSpartanPage.phone.sendKeys(spartanInfo.get("phone"));
+        addSpartanPage.submitBtn.click();
     }
 
     @Then("success message should be displayed")
