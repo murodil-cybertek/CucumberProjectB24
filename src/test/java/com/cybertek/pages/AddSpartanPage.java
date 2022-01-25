@@ -19,7 +19,10 @@ public class AddSpartanPage extends BasePage {
     public WebElement submitBtn;
 
     public void selectGender(String gender) {
-        new Select(genderElem).selectByVisibleText(gender);
+        Select select = new Select(genderElem);
+        select.selectByVisibleText(gender);
+
+       // new Select(genderElem).selectByVisibleText(gender);
     }
 
 }
