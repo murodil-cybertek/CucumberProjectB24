@@ -1,0 +1,96 @@
+
+Tue 01/25/2022
+--------------
+
+Practice session/Office hours
+
+UI automation with Cucumber BDD framework
+
+If we have time:
+	- add Database validation and Database clean up steps
+-----------------------------
+
+process of automation of UI test story:
+	-> Analyze/learn the functionality for the test:
+			-> BA, Developer, Team/QA Lead, Other QA Testers
+
+	-> Run the test step manually:
+		if everything is passing then start automation
+		if failing , report the bug
+
+	-> Create a git branch for the Automation user story in local project:
+
+	321-add_spartan_automation
+
+	-> add feature file and write the scenario in gherkin
+
+
+
+GIT PROCESS/WorkFlow:
+-> I add a new branch for each my automation user story
+321-add_spartan_automation(local branch for story) --> commit code and push the branch to github -->
+Create pull request in github and add code reviewers -->
+code reviewer adds comments for change or just approves -->
+make changes/updates locally and push to github branch again -->
+code reviewer approves -->
+merge your branch to master branch -->
+delete your branch
+You can goto jira and change the status to "done"
+
+new -> dev in progress -> completed
+
+new -> blocked (if it is failing manually)
+
+=============================================
+
+AUTOMATION PROCESS:
+
+-> add feature file and write the scenario in gherkin
+-> generate and add step definition methods
+-> if needed add page object and weblements with locators for the pages in the application that are used in the test steps
+-> write the steps and do the validations using junit assertions
+
+Open existing cheap CucumberProjectB24
+
+in properties file:
+
+spartan.url=http://YOUR_IP_ADDRESS:8000
+
+replace YOUR_IP_ADDRESS with your AWS EC2 server IP address
+
+if you do not have your own:
+
+   IP-1 :    44.201.134.164        Group 1 to 6
+   IP-2 :    54.158.153.204        Group 7 to 12
+   IP-3 :    3.84.251.99           Group 13 to 18
+
+it is better if you use your own
+
+----------
+
+add_spartan.feature
+
+Feature: Add new spartan
+
+Scenario: Add new spartan on UI and Compare with Confirmation page
+Given User is on spartan home page
+When User goes to Web Data page
+And clicks on add spartan
+And enters following data and submits:
+	| name | choose name |
+	| gender | male |
+	| phone | 1231231234 |
+Then success message should be displayed
+And data on confirmation page must be same
+
+====================
+
+SpartanHomePage
+
+SpartansDataTablePage
+
+AddSpartanPage
+
+SpartanConfirmationPage
+
+COMMAND/CTRL + SHIFT + F -> Search in all files
