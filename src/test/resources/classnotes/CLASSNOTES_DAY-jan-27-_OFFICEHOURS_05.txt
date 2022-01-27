@@ -1,0 +1,146 @@
+
+01/27/2022
+
+Office hours practice session.
+
+Open Cucumber project
+======================
+
+Singleton class -> a class of which we can have only ONE/Single object. And all classes/codes shares the same object.
+	-> Single object PER THREAD
+
+Driver class -> is SingleTon with Single driver object class for whole test, when test is running.
+
+SINGLE DRIVER OBJECT -> FOR EACH TEST
+
+When we applied
+private static ThreadLocal<WebDriver> driverPool = new ThreadLocal<>();
+
+it is still a singleton class, we just made it in a way that when tests are running in parellel. EACH TEST WILL HAVE ITS OWN SINGLE OBJECT OF DRIVER.
+
+Lets say below 3 tests are running at SAME TIME in Paralell MODE:
+
+Test1 --> running --> Driver1 object
+Test2 --> running --> Driver2 object
+Test3 --> running --> Driver3 object
+
+static variable -> belongs to class directly, we can access it using the classname.variablename
+				-> SHARED variable -> ONE copy of static variable ALWAYS. All objects of the class, share the same Variable.
+
+instance variable -> also called object variables. belongs to object
+	-> each object of the class will have its own COPY of the instance variable.
+==============================
+Driver class is singleton, that also supports multi threading. where each thread will have have its own SINGLE driver object.
+==============================
+
+@Murodil we use testNG j-unit and jupiter  for assertion and as i remember parallel test its not working for scenario outline with j-unit so how we can parallel testing  or which one we can say for parallel testing can you please explain it?
+
+In our framework Paralell execution is done by maven-surefire-plugin plugin.
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+
+So even if we use Junit/TestNG, it is able to perform paralell execution.
+Sure fire plugin treats Scenario Outline as Single Test, thats why it is not opening separate browser for each Test data in Examples table.
+==============================
+
+Test1 -> single browser1/driver object for whole test.
+
+CROSS Browser testing: testing application with different browsers like chrome, firefox, internet explorer(RUN), safari
+
+Irina Lazarenko — Today at 4:56 PM
+What is we want to do parallell and cross browser testing at the same time in Automation, @Murodil?
+
+So we want to be able to run our tests in paralell mode and in different browsers --> Yes
+
+TestNG.xml can help with that, but not a good approach.
+
+Cleaner approach -> add a jenkins job for each browser type and pass browser type as maven parameter.
+
+jenkins job 1:
+mvn clean install -Dbrowser=chrome
+
+jenkins job 2:
+mvn clean install -Dbrowser=firefox
+
+We goto jenkins and run each one at same time.
+Then each jenkins job will be running tests in paralell
+
+String browserType;
+if (System.getProperty("browser") != null) {
+     browserType = System.getProperty("browser");
+}else {
+     browserType = ConfigurationReader.getProperty("browser");
+}
+
+If we add above code to our Driver class, then
+we are checking if we are passing browser type as a maven parameter (-Dbrowser=chrome). If yes, we are running the tests with that browser, if NOT, we are using browser type that is defined in properties file. (browser=chrome)
+
+INTERVIEW: How do you do parallel execution and in different browsers.
+
+Parallel execution -> maven surefire plugin
+
+cross browser -> I create separate jenkins job for each browser type. and pass browser type as maven parameter -Dbrowser=chrome
+
+When jenkins jobs are running at same time, my tests run in different browsers.
+
+==============================
+
+-Dtags=@regression
+
+-Dtags=@smoke
+
+mvn clean install -Dbrowser=firefox -Dtags=@smoke
+
+==============================
+
+Selenium Grid -> Running tests remotely and multiple browsers.
+	-> it is a set up that enables execution of tests in multiple nodes in parallel mode.
+	-> enables execution of tests in AWS EC2 cloud Server
+
+
+Do you have experience with Amazon AWS?
+
+Yes, I use EC2 servers with Selenium grid for remote test execution.
+==============================================
+
+- surefire maven plugin -> helps with running tests in parellel mode. -> running multiple tests at same time. for efficiency
+
+- selenium grid -> HUB + nodes set up -> that helps with remote test execution in EC2 cloud servers. and also supports paralell execution of tests
+
+FLOW:
+	jenkins starts the job -> maven starts tests execution using surefire plugin -> surefire plugin executes tests in paralell mode -> in Driver class we are using RemoteWebDriver/Selenium grid -> Selenium Grid accepts requests of surefire in paralell mode and runs tests in EC2 remote servers
+
+	All execution reports come back to jenkins as HTML report.
+==============================================
+
+How do you execute your tests in parallel mode in your question?
+
+I use maven sure fire plugin to execute tests/scenarios in parallel mode.
+
+And I also use selenium grid to run those tests in AWS EC2 servers remotely.
+
+==============================================
+
+You just mentioned that your Driver class is singleton, and how do you able to run multiple tests at same time if it is singleton?
+
+Right right, i added ThreadLocal to my Driver, so now it supports SINGLE DRIVER for each THREAD/Test.
+
+==============================================
+
+Do you have any experience with CI/CD?
+How do you actually execute your smoke tests/regression tests?
+
+Yes, I added Jenkins jobs and scheduled daiiiily execution of smoke tests. Jenkins job runs the tests using Maven command that I specified in jenkins.
+
+When release time comes, normally I manually build regression jenkins job before each release.
+==============================================
+
+How do you do reporting in your framework?
+
+I set up maven-cucumber-reporting plugin that generates beautiful and detailed execution report.
+
+Fuat Vural — Today at 6:37 PM
+For  reports I use "maven-cucumber-reporting" which is a very detailed reporting tool, Even has the option to show what percentage of which tags are failing and passing.
+
+==============================================
+
