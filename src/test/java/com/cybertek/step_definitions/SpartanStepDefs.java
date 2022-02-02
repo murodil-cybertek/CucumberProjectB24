@@ -37,7 +37,7 @@ public class SpartanStepDefs {
 
     @When("enters following data and submits:")
     public void enters_following_data_and_submits(Map<String, String> spartanInfo) {
-        spartanMap.putAll(spartanInfo);
+        spartanMap.putAll(spartanInfo); //copy values of param map into spartanMap
         AddSpartanPage addSpartanPage = new AddSpartanPage();
         addSpartanPage.name.sendKeys(spartanInfo.get("name"));
         addSpartanPage.selectGender(spartanInfo.get("gender"));
@@ -53,6 +53,9 @@ public class SpartanStepDefs {
 
     @Then("data on confirmation page must be same")
     public void data_on_confirmation_page_must_be_same() {
-
+        SpartanConfirmationPage spartanConfirmationPage = new SpartanConfirmationPage();
+        Assert.assertEquals(spartanMap.get("name") , spartanConfirmationPage.name.getAttribute("value"));
+        Assert.assertEquals(spartanMap.get("gender") , spartanConfirmationPage.gender.getAttribute("value"));
+        Assert.assertEquals(spartanMap.get("phone") , spartanConfirmationPage.phone.getAttribute("value"));
     }
 }
