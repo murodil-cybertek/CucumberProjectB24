@@ -11,11 +11,12 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class SpartanStepDefs {
 
-    Map<String, String> spartanMap;
+    Map<String, String> spartanMap = new HashMap<>();
 
     @Given("User is on spartan home page")
     public void user_is_on_spartan_home_page() {
