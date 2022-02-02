@@ -1,5 +1,6 @@
 package com.cybertek.step_definitions;
 
+import com.cybertek.utilities.DBUtils;
 import com.cybertek.utilities.Driver;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterStep;
@@ -18,6 +19,18 @@ public class Hooks {
     @Before()
     public void setUpScenario() {
         System.out.println("BEFORE - setUp method is running before the scenario ");
+    }
+
+    @Before("@db")
+    public void setUpDb() {
+        System.out.println("Setting up database connection");
+        DBUtils.createConnection();
+    }
+
+    @After("@db")
+    public void teardownDb() {
+        System.out.println("Closing database connection");
+        DBUtils.destroy();
     }
 
     @After

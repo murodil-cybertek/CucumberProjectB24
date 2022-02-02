@@ -5,7 +5,9 @@ import com.cybertek.pages.SpartanConfirmationPage;
 import com.cybertek.pages.SpartanHomePage;
 import com.cybertek.pages.SpartansDataTablePage;
 import com.cybertek.utilities.ConfigurationReader;
+import com.cybertek.utilities.DBUtils;
 import com.cybertek.utilities.Driver;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -57,5 +59,16 @@ public class SpartanStepDefs {
         Assert.assertEquals(spartanMap.get("name") , spartanConfirmationPage.name.getAttribute("value"));
         Assert.assertEquals(spartanMap.get("gender") , spartanConfirmationPage.gender.getAttribute("value"));
         Assert.assertEquals(spartanMap.get("phone") , spartanConfirmationPage.phone.getAttribute("value"));
+    }
+
+    @And("data in database must be match")
+    public void dataInDatabaseMustBeMatch() {
+        Map<String, Object> dbMap = DBUtils.getRowMap("SELECT * FROM spartans WHERE name = 'Wooden Tester'");
+        Assert.assertEquals(spartanMap.get("name") , dbMap.get("NAME"));
+        Assert.assertEquals(spartanMap.get("gender") , dbMap.get("GENDER"));
+        Assert.assertEquals(spartanMap.get("phone") , dbMap.get("PHONE"));
+
+        //delete the spartan data after verification
+        DBUtils.executeQuery("DELETE FROM spartans WHERE name = 'Wooden Tester'");
     }
 }
